@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         result.setText(bmiCategory);
+
     }
     private void getIds(){
         male=findViewById(R.id.radioMale);
