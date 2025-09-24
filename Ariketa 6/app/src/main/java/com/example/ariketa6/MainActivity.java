@@ -1,6 +1,8 @@
 package com.example.ariketa6;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,5 +22,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         starter = findViewById(R.id.card_view_starters);
         main = findViewById(R.id.card_view_mains);
+
+        starter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent activityBerria = new Intent(MainActivity.this, StarterActivity.class);
+
+                startActivity(activityBerria);
+            }
+        });
     }
 }

@@ -12,6 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ariketa6">
         <activity
+            android:name=".StarterActivity"
+            android:exported="false"
+            android:label="Starter"
+            android:parentActivityName=".MainActivity"/>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
