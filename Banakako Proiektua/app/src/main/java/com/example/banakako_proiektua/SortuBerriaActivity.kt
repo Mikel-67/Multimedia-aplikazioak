@@ -14,20 +14,17 @@ import java.util.Locale
 import java.util.Date
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.content.Intent
+import android.widget.ImageButton
 import kotlin.jvm.java
 
-class MainActivity : AppCompatActivity() {
+class SortuBerriaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.actibitate_berriasortu)
+         val back: ImageButton = findViewById(R.id.btnBack)
 
-        val data: TextView = findViewById(R.id.tvFecha)
-        val fabAdd: FloatingActionButton = findViewById(R.id.fabAdd)
-
-        data.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
-
-        fabAdd.setOnClickListener {
-            val intent = Intent(this, SortuBerriaActivity::class.java)
+        back.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
     }
