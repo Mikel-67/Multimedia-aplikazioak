@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "3294432911",
+    "project_id": "habituaksortzen",
+    "storage_bucket": "habituaksortzen.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3294432911:android:2cfe588640c14902572afa",
+        "android_client_info": {
+          "package_name": "com.example.banakako_proiektua"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcyrFpmV22WGEaEiVH81G0bAjhxkRbbPs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
