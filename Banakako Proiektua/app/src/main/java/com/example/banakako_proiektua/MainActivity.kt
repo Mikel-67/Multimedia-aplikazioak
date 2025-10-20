@@ -1,13 +1,7 @@
 package com.example.banakako_proiektua
 
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import android.widget.ProgressBar
 import android.widget.TextView
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -19,11 +13,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import android.widget.CalendarView
 import android.widget.LinearLayout
 import android.widget.Toast
+import android.widget.CheckBox
+import android.view.Gravity
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var calendarView: CalendarView
-    private lateinit var layoutHabitosDelDia: LinearLayout
+    private lateinit var layoutMedicaciones: LinearLayout
     private lateinit var tvFecha: TextView
     private lateinit var db: FirebaseFirestore
     private val formatoFecha = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -32,64 +28,159 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Referencias
         tvFecha = findViewById(R.id.tvFecha)
         calendarView = findViewById(R.id.calendarView)
-        layoutHabitosDelDia = findViewById(R.id.layoutAbajo)
+        layoutMedicaciones = findViewById(R.id.layoutAbajo)
         val fabAdd: FloatingActionButton = findViewById(R.id.fabAdd)
 
-        // Inicializar Firebase
         db = FirebaseFirestore.getInstance()
 
-        // Fecha de hoy
         val hoy = formatoFecha.format(Date())
         tvFecha.text = hoy
 
-        // Cargar hábitos del día actual al iniciar
-        cargarHabitosDelDia(hoy)
+        cargarMedicacionesDelDia(hoy)
 
-        // Escuchar cambios en el calendario
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val fechaSeleccionada = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year)
             tvFecha.text = fechaSeleccionada
-            cargarHabitosDelDia(fechaSeleccionada)
+            cargarMedicacionesDelDia(fechaSeleccionada)
         }
 
-        // Botón + para abrir SortuBerriaActivity
+        // SortuBerriaActivity ireki
         fabAdd.setOnClickListener {
             val intent = Intent(this, SortuBerriaActivity::class.java)
             startActivity(intent)
         }
     }
 
-    private fun cargarHabitosDelDia(fecha: String) {
-        layoutHabitosDelDia.removeAllViews()
+    private fun cargarMedicacionesDelDia(fecha: String) {
+        val layoutMedicaciones: LinearLayout = findViewById(R.id.layoutAbajo)
+        layoutMedicaciones.removeAllViews() // limpiar antes de cargar
 
-        db.collection("habitos")
-            .whereEqualTo("hasta", fecha)
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("medicaciones")
             .get()
-            .addOnSuccessListener { documentos ->
-                if (documentos.isEmpty) {
-                    val texto = TextView(this)
-                    texto.text = "No hay hábitos para $fecha"
-                    texto.setTextColor(getColor(android.R.color.darker_gray))
-                    texto.textSize = 14f
-                    texto.setPadding(8, 8, 8, 8)
-                    layoutHabitosDelDia.addView(texto)
-                } else {
-                    for (doc in documentos) {
-                        val habito = doc.getString("habito") ?: "Sin nombre"
-                        val texto = TextView(this)
-                        texto.text = "• $habito"
-                        texto.setTextColor(getColor(android.R.color.white))
-                        texto.textSize = 16f
-                        texto.setPadding(8, 8, 8, 8)
-                        layoutHabitosDelDia.addView(texto)
+            .addOnSuccessListener { result ->
+                for (doc in result) {
+                    val nombre = doc.getString("izena") ?: continue
+                    val dosis = doc.getString("dosia") ?: ""
+                    val frecuencia = doc.getString("frekuentzia") ?: ""
+                    val hora = doc.getString("ordua") ?: ""
+                    val inicio = doc.getString("hasiera") ?: ""
+                    val fin = doc.getString("bukaera") ?: ""
+                    val ultimaFecha = doc.getString("azkenEgunaHartuta") ?: ""
+
+                    if (correspondeAlDia(fecha, inicio, fin, frecuencia)) {
+                        mostrarMedicacionEnCard(doc.id, nombre, dosis, hora, ultimaFecha, fecha)
                     }
                 }
             }
-            .addOnFailureListener {
-                Toast.makeText(this, "Error al cargar hábitos", Toast.LENGTH_SHORT).show()
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error al cargar medicaciones: ${e.message}", Toast.LENGTH_LONG).show()
             }
+    }
+    private fun correspondeAlDia(
+        fecha: String, inicio: String, fin: String, frecuencia: String
+    ): Boolean {
+        val formato = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val fechaActual = formato.parse(fecha)
+        val fechaInicio = formato.parse(inicio)
+        val fechaFin: Date? = if (fin != "Ez aukeratuta") {
+            formato.parse(fin)
+        } else {
+            formato.parse("31/12/4000")
+        }
+
+        if (fechaActual == null || fechaInicio == null || fechaFin == null) return false
+
+        if (fechaActual.before(fechaInicio) || fechaActual.after(fechaFin)) return false
+
+        return when {
+            frecuencia == "Egunero" -> true
+            frecuencia == "Astero" -> {
+                val diff = ((fechaActual.time - fechaInicio.time) / (1000 * 60 * 60 * 24)) % 7
+                diff == 0L
+            }
+            frecuencia.endsWith("Egunean behin") -> {
+                val numero = frecuencia.split(" ")[0]
+                val dias = numero.toIntOrNull()
+                if (dias == null || dias <= 0) return false
+
+                val diff = (fechaActual.time - fechaInicio.time) / (1000 * 60 * 60 * 24)
+                diff % dias == 0L
+            }
+            else -> false
+        }
+    }
+    private fun mostrarMedicacionEnCard(
+        docId: String,
+        nombre: String,
+        dosis: String,
+        hora: String,
+        ultimaFecha: String,
+        fechaHoy: String
+    ) {
+        val layoutMedicaciones: LinearLayout = findViewById(R.id.layoutAbajo)
+
+        // CardView
+        val cardView = androidx.cardview.widget.CardView(this).apply {
+            val margin = 16
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            params.setMargins(margin, margin, margin, margin)
+            layoutParams = params
+            radius = 24f
+            cardElevation = 8f
+            setCardBackgroundColor(resources.getColor(android.R.color.white))
+        }
+
+        val ll = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(24, 24, 24, 24)
+            gravity = Gravity.CENTER_VERTICAL
+        }
+
+
+        val tv = TextView(this).apply {
+            text = "$nombre - $dosis - $hora"
+            textSize = 16f
+            setTextColor(resources.getColor(android.R.color.black))
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        }
+
+        val checkBox = CheckBox(this).apply {
+            if (fechaHoy != SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())){
+                isEnabled = false
+            }
+            if (ultimaFecha>=fechaHoy){
+                isChecked = true
+            }else{
+                isChecked = false
+            }
+        }
+
+        checkBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                val db = FirebaseFirestore.getInstance()
+                val data = hashMapOf("azkenEgunaHartuta" to fechaHoy)
+                db.collection("medicaciones").document(docId)
+                    .update(data as Map<String, Any>)
+                    .addOnSuccessListener {
+                        Toast.makeText(this@MainActivity, "$nombre marcado como tomado", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(this@MainActivity, "$nombre marcado como tomado", Toast.LENGTH_SHORT).show()
+                        checkBox.isChecked = false
+                    }
+            }
+        }
+
+        ll.addView(checkBox)
+        ll.addView(tv)
+        cardView.addView(ll)
+        layoutMedicaciones.addView(cardView)
     }
 }

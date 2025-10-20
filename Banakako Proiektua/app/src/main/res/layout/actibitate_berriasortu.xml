@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
+    android:background="@color/white">
 
     <LinearLayout
         android:orientation="vertical"
@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <!-- Botón volver -->
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="40dp"
@@ -19,214 +20,94 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_media_previous"
             android:contentDescription="Volver"/>
-        <!-- Texto superior -->
+
+        <!-- Título -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Habito berria sortu"
+            android:text="Medikazio berria sortu"
             android:textSize="20sp"
-            android:layout_marginLeft="50dp"
-            android:textColor="#D3D3D3"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/black"
             android:textStyle="bold"/>
 
-        <!-- Espacio -->
-        <View
+        <!-- Nombre del medicamento -->
+        <EditText
+            android:id="@+id/etIzena"
             android:layout_width="match_parent"
-            android:layout_height="24dp"
+            android:layout_height="wrap_content"
+            android:hint="Medikamentuaren izena"
+            android:inputType="textPersonName"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Dosis -->
+        <EditText
+            android:id="@+id/etDosia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Dosia (adb. 1 pastilla)"
+            android:inputType="text"
+            android:layout_marginTop="12dp"/>
+
+        <!-- Frecuencia -->
+        <Spinner
+            android:id="@+id/spinnerFrekuentzia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"/>
+
+        <EditText
+            android:id="@+id/etEgunak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Zenbat egun"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
             />
 
-        <!-- Cuadro Nuevo Hábito más pequeño -->
-        <androidx.cardview.widget.CardView
+        <Spinner
+            android:id="@+id/spinnerOrdua"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginBottom="24dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            android:layout_marginLeft="50dp"
-            android:background="@color/white">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"/>
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:padding="16dp">
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@android:drawable/ic_menu_edit"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Nuevo hábito"
-                    android:textSize="16sp"
-                    android:textColor="#000000"
-                    android:layout_marginStart="16dp"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Espacio adicional antes de los recomendados -->
-        <View
+        <Button
+            android:id="@+id/btnHasieraData"
             android:layout_width="match_parent"
-            android:layout_height="24dp"/>
+            android:layout_height="wrap_content"
+            android:text="Hasierako data aukeratu"
+            android:layout_marginTop="16dp"/>
 
-        <!-- Hábito sugerido 1 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/habitoUra"
+        <TextView
+            android:id="@+id/tvHasieraData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ez aukeratuta"
+            android:layout_marginTop="4dp"
+            android:textColor="@android:color/darker_gray"/>
+
+        <Button
+            android:id="@+id/btnBukaeraData"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            android:background="@color/white"
-            android:layout_marginLeft="50dp">
+            android:layout_height="wrap_content"
+            android:text="Bukaera data aukeratu"
+            android:layout_marginTop="16dp"/>
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:padding="16dp">
+        <TextView
+            android:id="@+id/tvBukaeraData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ez aukeratuta"
+            android:layout_marginTop="4dp"
+            android:textColor="@android:color/darker_gray"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Beber más agua"
-                    android:textSize="18sp"
-                    android:textColor="#000000"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Hábito sugerido 2 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/habitoGym"
+        <Button
+            android:id="@+id/btnMedikazioaGorde"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            android:background="@color/white"
-            android:layout_marginLeft="50dp">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Hacer ejercicio"
-                    android:textSize="18sp"
-                    android:textColor="#000000"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Hábito sugerido 3 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/habitoLiburua"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            android:background="@color/white"
-            android:layout_marginLeft="50dp">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Leer un libro"
-                    android:textSize="18sp"
-                    android:textColor="#000000"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            android:background="@color/white"
-            android:layout_marginLeft="50dp">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Leer un libro"
-                    android:textSize="18sp"
-                    android:textColor="#000000"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            android:background="@color/white"
-            android:layout_marginLeft="50dp">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Leer un libro"
-                    android:textSize="18sp"
-                    android:textColor="#000000"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            android:background="@color/white"
-            android:layout_marginLeft="50dp">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Leer un libro"
-                    android:textSize="18sp"
-                    android:textColor="#000000"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
+            android:layout_height="wrap_content"
+            android:text="Guardar medicación"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/black"
+            android:textColor="@android:color/white"/>
     </LinearLayout>
 </ScrollView>
