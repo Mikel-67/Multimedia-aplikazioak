@@ -15,6 +15,8 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import android.widget.CheckBox
 import android.view.Gravity
+import android.view.ViewGroup
+import android.widget.ImageButton
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var layoutMedicaciones: LinearLayout
     private lateinit var tvFecha: TextView
     private lateinit var db: FirebaseFirestore
+    private var komprimatuta : Boolean = false
     private val formatoFecha = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,10 +49,21 @@ class MainActivity : AppCompatActivity() {
             cargarMedicacionesDelDia(fechaSeleccionada)
         }
 
-        // SortuBerriaActivity ireki
         fabAdd.setOnClickListener {
             val intent = Intent(this, SortuBerriaActivity::class.java)
             startActivity(intent)
+        }
+
+        val calendarBtn : FloatingActionButton = findViewById(R.id.btnToggleCalendar)
+        calendarBtn.setOnClickListener {
+            if (komprimatuta){
+                calendarView.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                komprimatuta = false
+            }else{
+                calendarView.layoutParams.height = 0
+                komprimatuta = true
+            }
+            calendarView.requestLayout()
         }
     }
 
@@ -123,7 +137,6 @@ class MainActivity : AppCompatActivity() {
     ) {
         val layoutMedicaciones: LinearLayout = findViewById(R.id.layoutAbajo)
 
-        // CardView
         val cardView = androidx.cardview.widget.CardView(this).apply {
             val margin = 16
             val params = LinearLayout.LayoutParams(
@@ -132,9 +145,11 @@ class MainActivity : AppCompatActivity() {
             )
             params.setMargins(margin, margin, margin, margin)
             layoutParams = params
-            radius = 24f
-            cardElevation = 8f
+            radius = 20f
+            cardElevation = 6f
             setCardBackgroundColor(resources.getColor(android.R.color.white))
+            preventCornerOverlap = true
+            useCompatPadding = true
         }
 
         val ll = LinearLayout(this).apply {
@@ -143,23 +158,18 @@ class MainActivity : AppCompatActivity() {
             gravity = Gravity.CENTER_VERTICAL
         }
 
-
         val tv = TextView(this).apply {
-            text = "$nombre - $dosis - $hora"
+            text = "$nombre\n$dosis - $hora"
             textSize = 16f
             setTextColor(resources.getColor(android.R.color.black))
             layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
         }
 
         val checkBox = CheckBox(this).apply {
-            if (fechaHoy != SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())){
+            if (fechaHoy != SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())) {
                 isEnabled = false
             }
-            if (ultimaFecha>=fechaHoy){
-                isChecked = true
-            }else{
-                isChecked = false
-            }
+            isChecked = ultimaFecha >= fechaHoy
         }
 
         checkBox.setOnCheckedChangeListener { _, isChecked ->
@@ -172,15 +182,16 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(this@MainActivity, "$nombre marcado como tomado", Toast.LENGTH_SHORT).show()
                     }
                     .addOnFailureListener { e ->
-                        Toast.makeText(this@MainActivity, "$nombre marcado como tomado", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity, "Error al marcar $nombre", Toast.LENGTH_SHORT).show()
                         checkBox.isChecked = false
                     }
             }
         }
 
-        ll.addView(checkBox)
         ll.addView(tv)
+        ll.addView(checkBox)
         cardView.addView(ll)
         layoutMedicaciones.addView(cardView)
     }
+
 }

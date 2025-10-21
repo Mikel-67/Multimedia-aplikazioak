@@ -4,110 +4,193 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:fillViewport="true"
+    android:background="@color/background_light">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="20dp">
 
-        <!-- Botón volver -->
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_media_previous"
-            android:contentDescription="Volver"/>
+            android:contentDescription="Volver"
+            app:tint="@color/teal_700" />
 
-        <!-- Título -->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Medikazio berria sortu"
-            android:textSize="20sp"
-            android:layout_marginTop="16dp"
-            android:textColor="@color/black"
-            android:textStyle="bold"/>
-
-        <!-- Nombre del medicamento -->
-        <EditText
-            android:id="@+id/etIzena"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Medikamentuaren izena"
-            android:inputType="textPersonName"
-            android:layout_marginTop="16dp"/>
-
-        <!-- Dosis -->
-        <EditText
-            android:id="@+id/etDosia"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Dosia (adb. 1 pastilla)"
-            android:inputType="text"
-            android:layout_marginTop="12dp"/>
-
-        <!-- Frecuencia -->
-        <Spinner
-            android:id="@+id/spinnerFrekuentzia"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"/>
-
-        <EditText
-            android:id="@+id/etEgunak"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Zenbat egun"
-            android:visibility="gone"
+            android:text="🩺 Medikazio berria sortu"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/teal_700"
+            android:gravity="center"
             android:layout_marginTop="8dp"
-            />
+            android:layout_marginBottom="16dp"/>
 
-        <Spinner
-            android:id="@+id/spinnerOrdua"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"/>
+            app:cardCornerRadius="20dp"
+            app:cardElevation="6dp"
+            android:backgroundTint="@android:color/white"
+            android:layout_marginBottom="24dp">
 
-        <Button
-            android:id="@+id/btnHasieraData"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Hasierako data aukeratu"
-            android:layout_marginTop="16dp"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tvHasieraData"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ez aukeratuta"
-            android:layout_marginTop="4dp"
-            android:textColor="@android:color/darker_gray"/>
+                <TextView
+                    android:text="Izena"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginTop="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-        <Button
-            android:id="@+id/btnBukaeraData"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Bukaera data aukeratu"
-            android:layout_marginTop="16dp"/>
+                <EditText
+                    android:id="@+id/etIzena"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Adib. Paracetamol"
+                    android:inputType="textPersonName"
+                    android:padding="12dp"
+                    android:background="@drawable/rounded_edittext" />
 
-        <TextView
-            android:id="@+id/tvBukaeraData"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ez aukeratuta"
-            android:layout_marginTop="4dp"
-            android:textColor="@android:color/darker_gray"/>
+                <TextView
+                    android:text="Dosia"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginTop="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-        <Button
+                <EditText
+                    android:id="@+id/etDosia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Adib. 1 pastilla"
+                    android:inputType="text"
+                    android:padding="12dp"
+                    android:background="@drawable/rounded_edittext" />
+
+                <TextView
+                    android:text="Frekuentzia"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginTop="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <Spinner
+                    android:id="@+id/spinnerFrekuentzia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_spinner"
+                    android:padding="12dp" />
+
+                <EditText
+                    android:id="@+id/etEgunak"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Zenbat egunero?"
+                    android:inputType="number"
+                    android:visibility="gone"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/rounded_edittext"
+                    android:padding="12dp"/>
+
+                <TextView
+                    android:text="Ordua"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginTop="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <Spinner
+                    android:id="@+id/spinnerOrdua"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_spinner"
+                    android:padding="12dp"/>
+
+                <TextView
+                    android:text="Hasierako data"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginTop="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btnHasieraData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Data aukeratu"
+                    android:backgroundTint="@color/teal_700"
+                    android:textColor="@android:color/white"
+                    android:layout_marginTop="6dp"
+                    android:padding="10dp"
+                    android:textAllCaps="false"/>
+
+                <TextView
+                    android:id="@+id/tvHasieraData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ez aukeratuta"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@android:color/darker_gray"/>
+
+                <TextView
+                    android:text="Bukaera data"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginTop="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btnBukaeraData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Data aukeratu"
+                    android:backgroundTint="@color/teal_700"
+                    android:textColor="@android:color/white"
+                    android:layout_marginTop="6dp"
+                    android:padding="10dp"
+                    android:textAllCaps="false"/>
+
+                <TextView
+                    android:id="@+id/tvBukaeraData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ez aukeratuta"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@android:color/darker_gray"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnMedikazioaGorde"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Guardar medicación"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="@color/black"
-            android:textColor="@android:color/white"/>
+            android:text="💾 Medikazioa gorde"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            app:cornerRadius="12dp"
+            android:padding="12dp"
+            android:backgroundTint="@color/teal_700"/>
+
     </LinearLayout>
 </ScrollView>
