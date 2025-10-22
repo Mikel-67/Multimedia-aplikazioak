@@ -32,7 +32,7 @@
                 android:id="@+id/tvMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="YVSHDQTPUTPF"
+                android:text="Ioar Mitxelena"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"/>
@@ -93,7 +93,6 @@
         tools:ignore="MissingConstraints"
         app:layout_constraintTop_toBottomOf="@id/calendarCard"
         app:layout_constraintStart_toStartOf="@id/calendarCard"
-
         />
     <TextView
         android:id="@+id/tvFecha"
