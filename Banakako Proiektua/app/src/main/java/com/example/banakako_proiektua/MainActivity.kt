@@ -28,6 +28,10 @@ class MainActivity : AppCompatActivity() {
     private var komprimatuta : Boolean = true
     private val formatoFecha = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
+    private lateinit var layoutgaua : LinearLayout
+    private lateinit var layouteguerdia : LinearLayout
+    private lateinit var layoutgoiza : LinearLayout
+
     fun setupDropdown(card: MaterialCardView, contentLayout: LinearLayout) {
         card.setOnClickListener {
             val isVisible = contentLayout.visibility == View.VISIBLE
@@ -77,14 +81,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun cargarMedicacionesDelDia(fecha: String) {
-        val layoutMedicaciones: LinearLayout = findViewById(R.id.layoutAbajo)
-        layoutMedicaciones.removeAllViews() // limpiar antes de cargar
+        layoutgaua = findViewById(R.id.layoutGaua)
+        layouteguerdia = findViewById(R.id.layoutEguerdia)
+        layoutgoiza = findViewById(R.id.layoutGoiz)
+
+        layoutgaua.removeAllViews()
+        layoutgoiza.removeAllViews()
+        layouteguerdia.removeAllViews()
 
         val db = FirebaseFirestore.getInstance()
 
         db.collection("medicaciones")
             .get()
             .addOnSuccessListener { result ->
+                var medicacionesdaude = false
+
                 for (doc in result) {
                     val nombre = doc.getString("izena") ?: continue
                     val dosis = doc.getString("dosia") ?: ""
@@ -96,7 +107,19 @@ class MainActivity : AppCompatActivity() {
 
                     if (correspondeAlDia(fecha, inicio, fin, frecuencia)) {
                         mostrarMedicacionEnCard(doc.id, nombre, dosis, hora, ultimaFecha, fecha)
+                        medicacionesdaude = true
                     }
+                }
+
+                if (!medicacionesdaude) {
+                    val tvNoData = TextView(this).apply {
+                        text = "Ez daude medikazioak gaurko"
+                        textSize = 16f
+                        setTextColor(resources.getColor(android.R.color.darker_gray))
+                        gravity = Gravity.CENTER
+                        setPadding(0, 24, 0, 24)
+                    }
+                    layoutMedicaciones.addView(tvNoData)
                 }
             }
             .addOnFailureListener { e ->
@@ -167,7 +190,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val tv = TextView(this).apply {
-            text = "$nombre\n$dosis"
+            text = "$nombre\nDosia: $dosis"
             textSize = 16f
             setTextColor(resources.getColor(android.R.color.black))
             layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
@@ -199,16 +222,15 @@ class MainActivity : AppCompatActivity() {
         ll.addView(tv)
         ll.addView(checkBox)
         cardView.addView(ll)
-        layoutMedicaciones.addView(cardView)
-        /*when (hora) {
-            "Goizean" -> layoutGoizean.addView(cardView)
-            "Eguerdian" -> layoutEguerdian.addView(cardView)
-            "Gauean" -> layoutGauean.addView(cardView)
+        when (hora) {
+            "Goizean" -> layoutgoiza.addView(cardView)
+            "Eguerdian" -> layouteguerdia.addView(cardView)
+            "Gauean" -> layoutgaua.addView(cardView)
             else -> {
                 val layoutMedicaciones: LinearLayout = findViewById(R.id.layoutAbajo)
                 layoutMedicaciones.addView(cardView)
             }
-        }*/
+        }
     }
 
 }
