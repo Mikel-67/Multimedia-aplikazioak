@@ -2,17 +2,8 @@ package com.example.banakako_proiektua
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import android.widget.ProgressBar
 import android.widget.TextView
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.Date
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.content.Intent
 import android.widget.ImageButton
 import kotlin.jvm.java
@@ -21,7 +12,6 @@ import java.util.Calendar
 import android.app.DatePickerDialog
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.cardview.widget.CardView
 import android.widget.ArrayAdapter
 import android.widget.AdapterView
 import android.view.View
@@ -129,7 +119,6 @@ class SortuBerriaActivity : AppCompatActivity() {
         var bukaeraDataDatua = bukaeraData.text.toString()
         val azkenEguna = null
 
-        // Validaciones simples
         if (izenaDatua.isEmpty() || dosiaDatua.isEmpty() || hasieraDataDatua == "No seleccionada") {
             Toast.makeText(this, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
             return
@@ -147,7 +136,6 @@ class SortuBerriaActivity : AppCompatActivity() {
             }
         }
 
-        // Crear mapa para Firebase
         val medicacion = hashMapOf(
             "izena" to izenaDatua,
             "dosia" to dosiaDatua,
