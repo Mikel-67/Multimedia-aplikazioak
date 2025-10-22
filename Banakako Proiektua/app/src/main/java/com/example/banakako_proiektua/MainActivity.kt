@@ -15,8 +15,10 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import android.widget.CheckBox
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import com.google.android.material.card.MaterialCardView
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,8 +26,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var layoutMedicaciones: LinearLayout
     private lateinit var tvFecha: TextView
     private lateinit var db: FirebaseFirestore
-    private var komprimatuta : Boolean = false
+    private var komprimatuta : Boolean = true
     private val formatoFecha = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+    fun setupDropdown(card: MaterialCardView, contentLayout: LinearLayout) {
+        card.setOnClickListener {
+            val isVisible = contentLayout.visibility == View.VISIBLE
+            contentLayout.visibility = if (isVisible) View.GONE else View.VISIBLE
+            contentLayout.animate().alpha(if (isVisible) 0f else 1f).setDuration(200).start()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,7 +145,6 @@ class MainActivity : AppCompatActivity() {
         ultimaFecha: String,
         fechaHoy: String
     ) {
-        val layoutMedicaciones: LinearLayout = findViewById(R.id.layoutAbajo)
 
         val cardView = androidx.cardview.widget.CardView(this).apply {
             val margin = 16
@@ -159,7 +168,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val tv = TextView(this).apply {
-            text = "$nombre\n$dosis - $hora"
+            text = "$nombre\n$dosis"
             textSize = 16f
             setTextColor(resources.getColor(android.R.color.black))
             layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
@@ -192,6 +201,15 @@ class MainActivity : AppCompatActivity() {
         ll.addView(checkBox)
         cardView.addView(ll)
         layoutMedicaciones.addView(cardView)
+        /*when (hora) {
+            "Goizean" -> layoutGoizean.addView(cardView)
+            "Eguerdian" -> layoutEguerdian.addView(cardView)
+            "Gauean" -> layoutGauean.addView(cardView)
+            else -> {
+                val layoutMedicaciones: LinearLayout = findViewById(R.id.layoutAbajo)
+                layoutMedicaciones.addView(cardView)
+            }
+        }*/
     }
 
 }
