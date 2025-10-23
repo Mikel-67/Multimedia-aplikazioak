@@ -94,7 +94,6 @@ class MainActivity : AppCompatActivity() {
         db.collection("medicaciones")
             .get()
             .addOnSuccessListener { result ->
-                var medicacionesdaude = false
 
                 for (doc in result) {
                     val nombre = doc.getString("izena") ?: continue
@@ -107,19 +106,7 @@ class MainActivity : AppCompatActivity() {
 
                     if (correspondeAlDia(fecha, inicio, fin, frecuencia)) {
                         mostrarMedicacionEnCard(doc.id, nombre, dosis, hora, ultimaFecha, fecha)
-                        medicacionesdaude = true
                     }
-                }
-
-                if (!medicacionesdaude) {
-                    val tvNoData = TextView(this).apply {
-                        text = "Ez daude medikazioak gaurko"
-                        textSize = 16f
-                        setTextColor(resources.getColor(android.R.color.darker_gray))
-                        gravity = Gravity.CENTER
-                        setPadding(0, 24, 0, 24)
-                    }
-                    layoutMedicaciones.addView(tvNoData)
                 }
             }
             .addOnFailureListener { e ->
@@ -148,7 +135,7 @@ class MainActivity : AppCompatActivity() {
                 val diff = ((fechaActual.time - fechaInicio.time) / (1000 * 60 * 60 * 24)) % 7
                 diff == 0L
             }
-            frecuencia.endsWith("Egunean behin") -> {
+            frecuencia.endsWith("egunean behin") -> {
                 val numero = frecuencia.split(" ")[0]
                 val dias = numero.toIntOrNull()
                 if (dias == null || dias <= 0) return false
